@@ -49,6 +49,7 @@ def addMarkers(filename, newfilename):
               var x = document.getElementById("frm1");
               rad = parseFloat(x.elements[0].value);
               num = parseFloat(x.elements[1].value);
+              window.alert("New Markers will now have specified radius of "+rad.toString(10)+" km and will show " +num.toString(10)+ " pictures")
             }
             var arr = ['<div class = "popup">']
             """+ mapid +""".on("click", function(e){
@@ -102,7 +103,8 @@ def addMarkers(filename, newfilename):
     .container{
 
         max-width: 960px;
-        width: 85%;
+        width: 80%;
+        left: 10%;
         margin: auto;
     }
     p {

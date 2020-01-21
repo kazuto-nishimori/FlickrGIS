@@ -23,7 +23,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_33343c97a0634ec0b1c4be708288927e {
+                #map_fb7be4b1c7dd46d2b38ed147b953e6f4 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -46,7 +46,7 @@
                     <br>
                    
                 </header>
-                <div class="folium-map" style="width: 80.0%; height: 80.0%; left: 10.0%; top: 10px; bottom: 200px;" id='map_33343c97a0634ec0b1c4be708288927e'></div>
+                <div class="folium-map" style="width: 80.0%; height: 80.0%; left: 10.0%; top: 10px; bottom: 200px;" id='map_fb7be4b1c7dd46d2b38ed147b953e6f4'></div>
                 <footer class = "container">
                     <h3>Contact: nwies@u.rochester.edu</h3>
                 </footer>
@@ -54,8 +54,8 @@
     
 <script>    
     
-            var map_33343c97a0634ec0b1c4be708288927e = L.map(
-                "map_33343c97a0634ec0b1c4be708288927e",
+            var map_fb7be4b1c7dd46d2b38ed147b953e6f4 = L.map(
+                "map_fb7be4b1c7dd46d2b38ed147b953e6f4",
                 {
                     center: [43.0, -100.0],
                     crs: L.CRS.EPSG3857,
@@ -69,10 +69,10 @@
 
         
     
-            var tile_layer_c1315434469e4a3b8948b9b34e4e1a1f = L.tileLayer(
+            var tile_layer_c9c9d467436947718133762397d82907 = L.tileLayer(
                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_33343c97a0634ec0b1c4be708288927e);
+            ).addTo(map_fb7be4b1c7dd46d2b38ed147b953e6f4);
         
 </script>
 <script>
@@ -85,9 +85,10 @@
               var x = document.getElementById("frm1");
               rad = parseFloat(x.elements[0].value);
               num = parseFloat(x.elements[1].value);
+              window.alert("New Markers will now have specified radius of "+rad.toString(10)+" km and will show " +num.toString(10)+ " pictures")
             }
             var arr = ['<div class = "popup">']
-            map_33343c97a0634ec0b1c4be708288927e.on("click", function(e){
+            map_fb7be4b1c7dd46d2b38ed147b953e6f4.on("click", function(e){
                 
                 function doJson(other){
                 $.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=ca370d51a054836007519a00ff4ce59e&per_page="+num.toString(10)+"&format=json&nojsoncallback=1&privacy_filter=1& accuracy=16&lat="+e.latlng.lat.toString(10)+"&lon="+e.latlng.lng.toString(10)+"&radius="+rad.toString(10),function(json){
@@ -109,7 +110,7 @@
                 var mymarker = L.marker(
                     [e.latlng.lat, e.latlng.lng],
                     {}
-                ).addTo(map_33343c97a0634ec0b1c4be708288927e);
+                ).addTo(map_fb7be4b1c7dd46d2b38ed147b953e6f4);
                 var allpics = arr.toString();
                 allpics = allpics.replace(/,/g, "");
                 mymarker.bindPopup(allpics);
@@ -138,7 +139,8 @@
     .container{
 
         max-width: 960px;
-        width: 85%;
+        width: 80%;
+        left: 10%;
         margin: auto;
     }
     p {

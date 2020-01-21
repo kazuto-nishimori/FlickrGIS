@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.5.1/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.5.1/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"/>
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_9a55948f06414c798b00c87d4342e10c {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+</head>
+
+    <body>
+                <header class = "container">
+                    <h1>Flickr GIS Project</h1>
+                    <h2>By Nathan Wies and Kazuto Nishimori</h2>
+                    <form id="frm1" action="/action_page.php">
+                      Radius: <input type="text" name="fname" value="1">
+                      Number of Pictures: <input type="text" name="lname" value="10">
+                      <button onclick="myFunction()">Change</button>
+                    </form>
+                    <br>
+                   
+                </header>
+                <div class="folium-map" style="width: 80.0%; height: 80.0%; left: 10.0%; top: 10px; bottom: 200px;" id='map_9a55948f06414c798b00c87d4342e10c'></div>
+                <footer class = "container">
+                    <h3>Contact: nwies@u.rochester.edu</h3>
+                </footer>
+    </body>
+    
+<script>    
+    
+            var map_9a55948f06414c798b00c87d4342e10c = L.map(
+                "map_9a55948f06414c798b00c87d4342e10c",
+                {
+                    center: [43.0, -100.0],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 4,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_4b577f9280174d62a422b2b12dfd437f = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_9a55948f06414c798b00c87d4342e10c);
+        
+</script>
+    <script>
+            var lat, lon; 
+            var apiurl, picurl;
+            var rad = parseFloat(1);
+            var num = parseFloat(10);
+            var count = 0;
+            function myFunction() {
+              var x = document.getElementById("frm1");
+              rad = parseFloat(x.elements[0].value);
+              num = parseFloat(x.elements[1].value);
+            }
+            var arr = ['<div class = "popup">']
+            map_9a55948f06414c798b00c87d4342e10c.on("click", function(e){
+                
+                function doJson(other){
+                $.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=ca370d51a054836007519a00ff4ce59e&per_page="+num.toString(10)+"&format=json&nojsoncallback=1&privacy_filter=1& accuracy=16&lat="+e.latlng.lat.toString(10)+"&lon="+e.latlng.lng.toString(10)+"&radius="+rad.toString(10),function(json){
+                    if(parseInt(json.photos.total)>0){
+                    arr.push("<h3>Total Pictures Found: "+json.photos.total.toString(10)+" at a radius of "+ rad.toString(10) +" km</h3><br> <p>Displaying Maximum of " +num.toString(10)+ " pictures</p>");
+                    $.each(json.photos.photo,function(i,result){
+                    picurl = "https://farm"+result.farm +".staticflickr.com/"+result.server +"/"+result.id+"_"+ result.secret+".jpg";
+                    arr.push('<img src="'+picurl+'"/><br>'+result.title+'<br><br>');
+                    count = count+1;
+                    })
+                    }
+                    else{
+                        arr.push('<p>No Images Found</p>')
+                    }
+                    other();
+                })}
+                function makeMarker(){
+                arr.push("<div>")
+
+
+                var mymarker = L.marker(
+                    [e.latlng.lat, e.latlng.lng],
+                    {}
+                ).addTo(map_9a55948f06414c798b00c87d4342e10c);
+                lat = e.latlng.lat;
+                lon = e.latlng.lng;
+                var allpics = arr.toString();
+                allpics = allpics.replace(/,/g, "");
+                mymarker.bindPopup(allpics);
+                picurl = ""
+                arr = ['<div class = "popup">']}
+                doJson(makeMarker);
+            })
+            
+
+</script>
+
+
+    </script>
+
+
+    <style>
+    .popup {
+       height: 300px;
+       width: 300px;
+       overflow: auto;
+    }
+    img {
+      width: 250px;
+      height: 250px;
+      object-fit: cover;
+    }
+    .container{
+
+        max-width: 960px;
+        width: 85%;
+        margin: auto;
+
+    }
+    p {
+    width: 250px;
+    
+    }
+    </style>
+    

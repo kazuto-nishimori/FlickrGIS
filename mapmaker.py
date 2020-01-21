@@ -21,7 +21,7 @@ def addMarkers(filename, newfilename):
                 <header class = "container">
                     <h1>Flickr GIS Project</h1>
                     <h2>By Nathan Wies and Kazuto Nishimori</h2>
-                    <form id="frm1" action="/action_page.php">
+                    <form id="frm1">
                       Radius: <input type="text" name="fname" value="1">
                       Number of Pictures: <input type="text" name="lname" value="10">
                       <button onclick="myFunction()">Change</button>

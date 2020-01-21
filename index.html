@@ -23,7 +23,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_9a55948f06414c798b00c87d4342e10c {
+                #map_5069d0ddb1974630b5e2777a37bbe205 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -38,7 +38,7 @@
                 <header class = "container">
                     <h1>Flickr GIS Project</h1>
                     <h2>By Nathan Wies and Kazuto Nishimori</h2>
-                    <form id="frm1" action="/action_page.php">
+                    <form id="frm1">
                       Radius: <input type="text" name="fname" value="1">
                       Number of Pictures: <input type="text" name="lname" value="10">
                       <button onclick="myFunction()">Change</button>
@@ -46,7 +46,7 @@
                     <br>
                    
                 </header>
-                <div class="folium-map" style="width: 80.0%; height: 80.0%; left: 10.0%; top: 10px; bottom: 200px;" id='map_9a55948f06414c798b00c87d4342e10c'></div>
+                <div class="folium-map" style="width: 80.0%; height: 80.0%; left: 10.0%; top: 10px; bottom: 200px;" id='map_5069d0ddb1974630b5e2777a37bbe205'></div>
                 <footer class = "container">
                     <h3>Contact: nwies@u.rochester.edu</h3>
                 </footer>
@@ -54,8 +54,8 @@
     
 <script>    
     
-            var map_9a55948f06414c798b00c87d4342e10c = L.map(
-                "map_9a55948f06414c798b00c87d4342e10c",
+            var map_5069d0ddb1974630b5e2777a37bbe205 = L.map(
+                "map_5069d0ddb1974630b5e2777a37bbe205",
                 {
                     center: [43.0, -100.0],
                     crs: L.CRS.EPSG3857,
@@ -69,10 +69,10 @@
 
         
     
-            var tile_layer_4b577f9280174d62a422b2b12dfd437f = L.tileLayer(
+            var tile_layer_6ae90df343e443f79c18c1a4c2770bee = L.tileLayer(
                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_9a55948f06414c798b00c87d4342e10c);
+            ).addTo(map_5069d0ddb1974630b5e2777a37bbe205);
         
 </script>
     <script>
@@ -87,7 +87,7 @@
               num = parseFloat(x.elements[1].value);
             }
             var arr = ['<div class = "popup">']
-            map_9a55948f06414c798b00c87d4342e10c.on("click", function(e){
+            map_5069d0ddb1974630b5e2777a37bbe205.on("click", function(e){
                 
                 function doJson(other){
                 $.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=ca370d51a054836007519a00ff4ce59e&per_page="+num.toString(10)+"&format=json&nojsoncallback=1&privacy_filter=1& accuracy=16&lat="+e.latlng.lat.toString(10)+"&lon="+e.latlng.lng.toString(10)+"&radius="+rad.toString(10),function(json){
@@ -111,7 +111,7 @@
                 var mymarker = L.marker(
                     [e.latlng.lat, e.latlng.lng],
                     {}
-                ).addTo(map_9a55948f06414c798b00c87d4342e10c);
+                ).addTo(map_5069d0ddb1974630b5e2777a37bbe205);
                 lat = e.latlng.lat;
                 lon = e.latlng.lng;
                 var allpics = arr.toString();

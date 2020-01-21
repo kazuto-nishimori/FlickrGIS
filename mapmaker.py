@@ -22,9 +22,9 @@ def addMarkers(filename, newfilename):
                     <h1>Flickr GIS Project</h1>
                     <h2>By Nathan Wies and Kazuto Nishimori</h2>
                     <form id="frm1">
-                      Radius: <input type="text" name="fname" value="1">
-                      Number of Pictures: <input type="text" name="lname" value="10">
-                      <button onclick="myFunction()">Change</button>
+                      Radius: <input type="text" name="rad" id="radius" value="1">
+                      Number of Pictures: <input type="text" name="pics" id="picture" value="10">
+                      <button type="button" onclick="myFunction();">Change</button>
                     </form>
                     <br>
                    
@@ -39,7 +39,7 @@ def addMarkers(filename, newfilename):
 
 
     custom_map = """
-    <script>
+<script>
             var lat, lon; 
             var apiurl, picurl;
             var rad = parseFloat(1);
@@ -56,7 +56,7 @@ def addMarkers(filename, newfilename):
                 function doJson(other){
                 $.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=ca370d51a054836007519a00ff4ce59e&per_page="+num.toString(10)+"&format=json&nojsoncallback=1&privacy_filter=1& accuracy=16&lat="+e.latlng.lat.toString(10)+"&lon="+e.latlng.lng.toString(10)+"&radius="+rad.toString(10),function(json){
                     if(parseInt(json.photos.total)>0){
-                    arr.push("<h3>Total Pictures Found: "+json.photos.total.toString(10)+" at a radius of "+ rad.toString(10) +" km</h3><br> <p>Displaying Maximum of " +num.toString(10)+ " pictures</p>");
+                    arr.push("<h3>Total Pictures Found: "+json.photos.total.toString(10)+" at a radius of "+ rad.toString(10) +" km</h3><br><p><h5>Coordinates</h5>Latitude: " + e.latlng.lat.toString(10) + "<br>Longitude: " + e.latlng.lng.toString(10) + "</p><p>Displaying Maximum of " +num.toString(10)+ " pictures</p>");
                     $.each(json.photos.photo,function(i,result){
                     picurl = "https://farm"+result.farm +".staticflickr.com/"+result.server +"/"+result.id+"_"+ result.secret+".jpg";
                     arr.push('<img src="'+picurl+'"/><br>'+result.title+'<br><br>');
@@ -70,52 +70,46 @@ def addMarkers(filename, newfilename):
                 })}
                 function makeMarker(){
                 arr.push("<div>")
-
-
                 var mymarker = L.marker(
                     [e.latlng.lat, e.latlng.lng],
                     {}
                 ).addTo(""" + mapid + """);
-                lat = e.latlng.lat;
-                lon = e.latlng.lng;
                 var allpics = arr.toString();
                 allpics = allpics.replace(/,/g, "");
                 mymarker.bindPopup(allpics);
                 picurl = ""
-                arr = ['<div class = "popup">']}
+                arr = ['<div class = "popup">']
+                }
                 doJson(makeMarker);
             })
-            
-
 </script>
 
-
-    </script>
-
-
-    <style>
+<style>
     .popup {
+    
        height: 300px;
        width: 300px;
        overflow: auto;
     }
+    
     img {
+    
       width: 250px;
       height: 250px;
       object-fit: cover;
     }
+    
     .container{
 
         max-width: 960px;
         width: 85%;
         margin: auto;
-
     }
     p {
-    width: 250px;
     
+    width: 250px;
     }
-    </style>
+</style>
     """
 
 

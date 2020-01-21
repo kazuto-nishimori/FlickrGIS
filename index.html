@@ -23,7 +23,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_5069d0ddb1974630b5e2777a37bbe205 {
+                #map_33343c97a0634ec0b1c4be708288927e {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -39,14 +39,14 @@
                     <h1>Flickr GIS Project</h1>
                     <h2>By Nathan Wies and Kazuto Nishimori</h2>
                     <form id="frm1">
-                      Radius: <input type="text" name="fname" value="1">
-                      Number of Pictures: <input type="text" name="lname" value="10">
-                      <button onclick="myFunction()">Change</button>
+                      Radius: <input type="text" name="rad" id="radius" value="1">
+                      Number of Pictures: <input type="text" name="pics" id="picture" value="10">
+                      <button type="button" onclick="myFunction();">Change</button>
                     </form>
                     <br>
                    
                 </header>
-                <div class="folium-map" style="width: 80.0%; height: 80.0%; left: 10.0%; top: 10px; bottom: 200px;" id='map_5069d0ddb1974630b5e2777a37bbe205'></div>
+                <div class="folium-map" style="width: 80.0%; height: 80.0%; left: 10.0%; top: 10px; bottom: 200px;" id='map_33343c97a0634ec0b1c4be708288927e'></div>
                 <footer class = "container">
                     <h3>Contact: nwies@u.rochester.edu</h3>
                 </footer>
@@ -54,8 +54,8 @@
     
 <script>    
     
-            var map_5069d0ddb1974630b5e2777a37bbe205 = L.map(
-                "map_5069d0ddb1974630b5e2777a37bbe205",
+            var map_33343c97a0634ec0b1c4be708288927e = L.map(
+                "map_33343c97a0634ec0b1c4be708288927e",
                 {
                     center: [43.0, -100.0],
                     crs: L.CRS.EPSG3857,
@@ -69,13 +69,13 @@
 
         
     
-            var tile_layer_6ae90df343e443f79c18c1a4c2770bee = L.tileLayer(
+            var tile_layer_c1315434469e4a3b8948b9b34e4e1a1f = L.tileLayer(
                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_5069d0ddb1974630b5e2777a37bbe205);
+            ).addTo(map_33343c97a0634ec0b1c4be708288927e);
         
 </script>
-    <script>
+<script>
             var lat, lon; 
             var apiurl, picurl;
             var rad = parseFloat(1);
@@ -87,12 +87,12 @@
               num = parseFloat(x.elements[1].value);
             }
             var arr = ['<div class = "popup">']
-            map_5069d0ddb1974630b5e2777a37bbe205.on("click", function(e){
+            map_33343c97a0634ec0b1c4be708288927e.on("click", function(e){
                 
                 function doJson(other){
                 $.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=ca370d51a054836007519a00ff4ce59e&per_page="+num.toString(10)+"&format=json&nojsoncallback=1&privacy_filter=1& accuracy=16&lat="+e.latlng.lat.toString(10)+"&lon="+e.latlng.lng.toString(10)+"&radius="+rad.toString(10),function(json){
                     if(parseInt(json.photos.total)>0){
-                    arr.push("<h3>Total Pictures Found: "+json.photos.total.toString(10)+" at a radius of "+ rad.toString(10) +" km</h3><br> <p>Displaying Maximum of " +num.toString(10)+ " pictures</p>");
+                    arr.push("<h3>Total Pictures Found: "+json.photos.total.toString(10)+" at a radius of "+ rad.toString(10) +" km</h3><br><p><h5>Coordinates</h5>Latitude: " + e.latlng.lat.toString(10) + "<br>Longitude: " + e.latlng.lng.toString(10) + "</p><p>Displaying Maximum of " +num.toString(10)+ " pictures</p>");
                     $.each(json.photos.photo,function(i,result){
                     picurl = "https://farm"+result.farm +".staticflickr.com/"+result.server +"/"+result.id+"_"+ result.secret+".jpg";
                     arr.push('<img src="'+picurl+'"/><br>'+result.title+'<br><br>');
@@ -106,50 +106,44 @@
                 })}
                 function makeMarker(){
                 arr.push("<div>")
-
-
                 var mymarker = L.marker(
                     [e.latlng.lat, e.latlng.lng],
                     {}
-                ).addTo(map_5069d0ddb1974630b5e2777a37bbe205);
-                lat = e.latlng.lat;
-                lon = e.latlng.lng;
+                ).addTo(map_33343c97a0634ec0b1c4be708288927e);
                 var allpics = arr.toString();
                 allpics = allpics.replace(/,/g, "");
                 mymarker.bindPopup(allpics);
                 picurl = ""
-                arr = ['<div class = "popup">']}
+                arr = ['<div class = "popup">']
+                }
                 doJson(makeMarker);
             })
-            
-
 </script>
 
-
-    </script>
-
-
-    <style>
+<style>
     .popup {
+    
        height: 300px;
        width: 300px;
        overflow: auto;
     }
+    
     img {
+    
       width: 250px;
       height: 250px;
       object-fit: cover;
     }
+    
     .container{
 
         max-width: 960px;
         width: 85%;
         margin: auto;
-
     }
     p {
-    width: 250px;
     
+    width: 250px;
     }
-    </style>
+</style>
     

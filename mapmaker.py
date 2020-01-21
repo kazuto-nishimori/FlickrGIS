@@ -41,7 +41,7 @@ def addMarkers(filename, newfilename):
     custom_map = """
 <script>
             var lat, lon; 
-            var apiurl, picurl;
+            var apiurl, picurl, address;
             var rad = parseFloat(1);
             var num = parseFloat(10);
             var count = 0;
@@ -54,10 +54,17 @@ def addMarkers(filename, newfilename):
             var arr = ['<div class = "popup">']
             """+ mapid +""".on("click", function(e){
                 
+                function getAddress(other){
+                $.get('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+ e.latlng.lat.toString(10) +'&lon='+e.latlng.lng.toString(10), function(data){
+                    address = data.address;
+                });
+                other(makeMarker);
+                }
+                
                 function doJson(other){
                 $.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=ca370d51a054836007519a00ff4ce59e&per_page="+num.toString(10)+"&format=json&nojsoncallback=1&privacy_filter=1& accuracy=16&lat="+e.latlng.lat.toString(10)+"&lon="+e.latlng.lng.toString(10)+"&radius="+rad.toString(10),function(json){
                     if(parseInt(json.photos.total)>0){
-                    arr.push("<h3>Total Pictures Found: "+json.photos.total.toString(10)+" at a radius of "+ rad.toString(10) +" km</h3><br><p><h5>Coordinates</h5>Latitude: " + e.latlng.lat.toString(10) + "<br>Longitude: " + e.latlng.lng.toString(10) + "</p><p>Displaying Maximum of " +num.toString(10)+ " pictures</p>");
+                    arr.push("<h3>Total Pictures Found: "+json.photos.total.toString(10)+" at a radius of "+ rad.toString(10) +" km</h3><p><h5>Nearest Address</h5>Road: " + address.road + "<br>City: "+address.city+"<br> Postcode: "+ address.postcode + "<br> Country: " + address.country +"</p><p><h5>Coordinates</h5>Latitude: " + e.latlng.lat.toString(10) + "<br>Longitude: " + e.latlng.lng.toString(10) + "</p><p>Displaying Maximum of " +num.toString(10)+ " pictures</p>");
                     $.each(json.photos.photo,function(i,result){
                     picurl = "https://farm"+result.farm +".staticflickr.com/"+result.server +"/"+result.id+"_"+ result.secret+".jpg";
                     arr.push('<img src="'+picurl+'"/><br>'+result.title+'<br><br>');
@@ -81,7 +88,7 @@ def addMarkers(filename, newfilename):
                 picurl = ""
                 arr = ['<div class = "popup">']
                 }
-                doJson(makeMarker);
+                getAddress(doJson);
             })
 </script>
 

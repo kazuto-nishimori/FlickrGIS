@@ -23,7 +23,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_fb7be4b1c7dd46d2b38ed147b953e6f4 {
+                #map_f0840f76046549379b73343a5bf4915d {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -46,7 +46,7 @@
                     <br>
                    
                 </header>
-                <div class="folium-map" style="width: 80.0%; height: 80.0%; left: 10.0%; top: 10px; bottom: 200px;" id='map_fb7be4b1c7dd46d2b38ed147b953e6f4'></div>
+                <div class="folium-map" style="width: 80.0%; height: 80.0%; left: 10.0%; top: 10px; bottom: 200px;" id='map_f0840f76046549379b73343a5bf4915d'></div>
                 <footer class = "container">
                     <h3>Contact: nwies@u.rochester.edu</h3>
                 </footer>
@@ -54,8 +54,8 @@
     
 <script>    
     
-            var map_fb7be4b1c7dd46d2b38ed147b953e6f4 = L.map(
-                "map_fb7be4b1c7dd46d2b38ed147b953e6f4",
+            var map_f0840f76046549379b73343a5bf4915d = L.map(
+                "map_f0840f76046549379b73343a5bf4915d",
                 {
                     center: [43.0, -100.0],
                     crs: L.CRS.EPSG3857,
@@ -69,15 +69,15 @@
 
         
     
-            var tile_layer_c9c9d467436947718133762397d82907 = L.tileLayer(
+            var tile_layer_d348238660b44fc3bd2402120b7c87d7 = L.tileLayer(
                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_fb7be4b1c7dd46d2b38ed147b953e6f4);
+            ).addTo(map_f0840f76046549379b73343a5bf4915d);
         
 </script>
 <script>
             var lat, lon; 
-            var apiurl, picurl;
+            var apiurl, picurl, address;
             var rad = parseFloat(1);
             var num = parseFloat(10);
             var count = 0;
@@ -88,12 +88,19 @@
               window.alert("New Markers will now have specified radius of "+rad.toString(10)+" km and will show " +num.toString(10)+ " pictures")
             }
             var arr = ['<div class = "popup">']
-            map_fb7be4b1c7dd46d2b38ed147b953e6f4.on("click", function(e){
+            map_f0840f76046549379b73343a5bf4915d.on("click", function(e){
+                
+                function getAddress(other){
+                $.get('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+ e.latlng.lat.toString(10) +'&lon='+e.latlng.lng.toString(10), function(data){
+                    address = data.address;
+                });
+                other(makeMarker);
+                }
                 
                 function doJson(other){
                 $.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=ca370d51a054836007519a00ff4ce59e&per_page="+num.toString(10)+"&format=json&nojsoncallback=1&privacy_filter=1& accuracy=16&lat="+e.latlng.lat.toString(10)+"&lon="+e.latlng.lng.toString(10)+"&radius="+rad.toString(10),function(json){
                     if(parseInt(json.photos.total)>0){
-                    arr.push("<h3>Total Pictures Found: "+json.photos.total.toString(10)+" at a radius of "+ rad.toString(10) +" km</h3><br><p><h5>Coordinates</h5>Latitude: " + e.latlng.lat.toString(10) + "<br>Longitude: " + e.latlng.lng.toString(10) + "</p><p>Displaying Maximum of " +num.toString(10)+ " pictures</p>");
+                    arr.push("<h3>Total Pictures Found: "+json.photos.total.toString(10)+" at a radius of "+ rad.toString(10) +" km</h3><p><h5>Nearest Address</h5>Road: " + address.road + "<br>City: "+address.city+"<br> Postcode: "+ address.postcode + "<br> Country: " + address.country +"</p><p><h5>Coordinates</h5>Latitude: " + e.latlng.lat.toString(10) + "<br>Longitude: " + e.latlng.lng.toString(10) + "</p><p>Displaying Maximum of " +num.toString(10)+ " pictures</p>");
                     $.each(json.photos.photo,function(i,result){
                     picurl = "https://farm"+result.farm +".staticflickr.com/"+result.server +"/"+result.id+"_"+ result.secret+".jpg";
                     arr.push('<img src="'+picurl+'"/><br>'+result.title+'<br><br>');
@@ -110,14 +117,14 @@
                 var mymarker = L.marker(
                     [e.latlng.lat, e.latlng.lng],
                     {}
-                ).addTo(map_fb7be4b1c7dd46d2b38ed147b953e6f4);
+                ).addTo(map_f0840f76046549379b73343a5bf4915d);
                 var allpics = arr.toString();
                 allpics = allpics.replace(/,/g, "");
                 mymarker.bindPopup(allpics);
                 picurl = ""
                 arr = ['<div class = "popup">']
                 }
-                doJson(makeMarker);
+                getAddress(doJson);
             })
 </script>
 
